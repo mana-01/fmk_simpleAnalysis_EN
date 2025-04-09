@@ -259,18 +259,18 @@ function previewPhoto(input) {
 
 // パーソナルカラータイプの定数
 const SEASON_TYPES = {
-    SPRING_CLEAR: '鮮やかなスプリング',
-    SPRING_BRIGHT: '明るいスプリング',
-    SPRING_YELLOW: '黄みのスプリング',
-    SUMMER_MUTED: 'くすみサマー',
-    SUMMER_BRIGHT: '明るいサマー',
-    SUMMER_BLUE: '青みサマー',
-    AUTUMN_MUTED: 'くすみオータム',
-    AUTUMN_DARK: '暗いオータム',
-    AUTUMN_YELLOW: '黄みのオータム',
-    WINTER_CLEAR: '鮮やかなウィンター',
-    WINTER_DARK: '暗いウィンター',
-    WINTER_BLUE: '青みウィンター'
+    SPRING_CLEAR: 'Clear Spring ✨',
+    SPRING_BRIGHT: 'Bright Spring 🌞',
+    SPRING_YELLOW: 'Warm Spring 🍋',
+    SUMMER_MUTED: 'Soft Summer 🌸',
+    SUMMER_BRIGHT: 'Light Summer 💫',
+    SUMMER_BLUE: 'Cool Summer 🌊',
+    AUTUMN_MUTED: 'Soft Autumn 🍂',
+    AUTUMN_DARK: 'Deep Autumn 🍁',
+    AUTUMN_YELLOW: 'Warm Autumn 🍯',
+    WINTER_CLEAR: 'Clear Winter ❄️',
+    WINTER_DARK: 'Deep Winter ⚡',
+    WINTER_BLUE: 'Cool Winter 💎'
 };
 
 // 新しいカラー定義
