@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find My Kernel: Your style essence, decoded</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">FMK</div>
+            <div class="subtitle">Quick quiz :Decode your unique fashion DNA</div>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+        
+        <!-- Step 1: Gender Selection -->
+        <div class="card" id="step1">
+            <div class="question">
+                <div class="question-title">What's your style?</div>
+                <div class="question-subtitle">Choose the gender expression that feels most like you.</div>
+                <div class="options">
+                    <div class="option" onclick="selectOption(this, 'gender', 'feminine')">
+                        Feminine
+                    </div>
+                    <div class="option" onclick="selectOption(this, 'gender', 'masculine')">
+                        Masculine
+                    </div>
+                    <!-- <div class="option" onclick="selectOption(this, 'gender', 'neutral')">
+                        Neither/I prefer gender-neutral styles
+                    </div> -->
+                </div>
+            </div>
+            <div class="btn" onclick="nextStep(1, 2)">Next</div>
+        </div>
+        
+        <!-- Step 2: ID Photo Upload -->
+        <div class="card hidden" id="step2">
+            <div class="question">
+                <div class="question-title">Upload a headshot-style photo 📸</div>
+                <div class="question-subtitle">We'll compare your face with different color palettes<br>to determine your personal color season</div>
+                <div class="photo-upload">
+                    <div class="upload-area" id="upload-area" onclick="document.getElementById('photo-input').click()">
+                        <div class="upload-icon">📸</div>
+                        <div>Click to upload your photo</div>
+                        <input type="file" id="photo-input" style="display: none;" accept="image/*" onchange="previewPhoto(this)">
+                    </div>
+                    <div id="photo-preview-container" style="display: none;">
+                        <img id="photo-preview" src="" alt="Preview" style="max-width: 100%; max-height: 200px; border-radius: 10px;">
+                    </div>
+                </div>
+                <div style="font-size: 12px; color: #666; margin-top: 8px; text-align: center;">*Your uploaded photo will be deleted<br>immediately after the analysis is complete.</div>
+            </div>
+            <div class="btn-container">
+                <button class="back-btn" onclick="prevStep(2, 1)">←</button>
+                <div class="btn" onclick="nextStep(2, 3)" id="upload-next-btn" style="display: none; flex-grow: 1;">Next</div>
+            </div>
+        </div>
+
+        <!-- Step 3: Color Comparison -->
+        <div class="card hidden" id="step3">
+            <div class="question">
+                <div class="question-title">Color Season Analysis</div>
+                <div class="question-subtitle">Which color tone suits you better?</div>
+                <div id="color-test-container">
+                    <!-- Color Test 1: Warm vs Cool -->
+                    <div class="color-comparison" id="color-test-1">
+                        <div class="color-set" onclick="selectColorOption(this, 'warm', true)" data-color="warm">
+                            <div class="photo-container">
+                                <div class="photo-preview"></div>
+                            </div>
+                            <div class="color-box" style="background-image: url('material/gold.png'); background-size: cover;"></div>
+                            <div class="color-name">Warm</div>
+                        </div>
+                        <div class="color-set" onclick="selectColorOption(this, 'cool', true)" data-color="cool">
+                            <div class="photo-container">
+                                <div class="photo-preview"></div>
+                            </div>
+                            <div class="color-box" style="background-image: url('material/silver.png'); background-size: cover;"></div>
+                            <div class="color-name">Cool</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Color Test 2: Light vs Dark -->
+                    <div class="color-comparison hidden" id="color-test-2">
+                        <div class="color-set" onclick="selectColorOption(this, 'light', true)" data-color="light">
+                            <div class="photo-container">
+                                <div class="photo-preview"></div>
+                            </div>
+                            <div class="color-box" id="light-clear-color-box"></div>
+                            <div class="color-name">Light</div>
+                        </div>
+                        <div class="color-set" onclick="selectColorOption(this, 'dark', true)" data-color="dark">
+                            <div class="photo-container">
+                                <div class="photo-preview"></div>
+                            </div>
+                            <div class="color-box" id="light-muted-color-box"></div>
+                            <div class="color-name">Dark</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Color Test 3: Clear vs Muted -->
+                    <div class="color-comparison hidden" id="color-test-3">
+                        <div class="color-set" onclick="selectColorOption(this, 'clear', true)" data-color="clear">
+                            <div class="photo-container">
+                                <div class="photo-preview"></div>
+                            </div>
+                            <div class="color-box" id="clear-light-color-box"></div>
+                            <div class="color-name">Clear</div>
+                        </div>
+                        <div class="color-set" onclick="selectColorOption(this, 'muted', true)" data-color="muted">
+                            <div class="photo-container">
+                                <div class="photo-preview"></div>
+                            </div>
+                            <div class="color-box" id="muted-light-color-box"></div>
+                            <div class="color-name">Muted</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Color Test 4: High vs Low Contrast -->
+                    <div class="color-comparison hidden" id="color-test-4">
+                        <div class="color-set" onclick="selectColorOption(this, 'high', true)" data-color="high">
+                            <div class="photo-container">
+                                <div class="photo-preview"></div>
+                            </div>
+                            <div class="color-box" id="high-contrast-color-box"></div>
+                            <div class="color-name">High Contrast</div>
+                        </div>
+                        <div class="color-set" onclick="selectColorOption(this, 'low', true)" data-color="low">
+                            <div class="photo-container">
+                                <div class="photo-preview"></div>
+                            </div>
+                            <div class="color-box" id="low-contrast-color-box"></div>
+                            <div class="color-name">Soft</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Color Test 5: Final Season Determination -->
+                    <div class="color-comparison hidden" id="color-test-5">
+                        <div class="color-set" onclick="selectColorOption(this, 'season1', true)" data-color="season1">
+                            <div class="photo-container">
+                                <div class="photo-preview"></div>
+                            </div>
+                            <div class="color-box" id="season1-color-box"></div>
+                            <div class="color-name" id="season1-name"></div>
+                        </div>
+                        <div class="color-set" onclick="selectColorOption(this, 'season2', true)" data-color="season2">
+                            <div class="photo-container">
+                                <div class="photo-preview"></div>
+                            </div>
+                            <div class="color-box" id="season2-color-box"></div>
+                            <div class="color-name" id="season2-name"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="color-pagination">
+                    <div class="dot active" onclick="showColorTest(1)"></div>
+                    <div class="dot" onclick="showColorTest(2)"></div>
+                    <div class="dot" onclick="showColorTest(3)"></div>
+                    <div class="dot" onclick="showColorTest(4)"></div>
+                    <div class="dot" onclick="showColorTest(5)"></div>
+                </div>
+            </div>
+            <div class="btn-container">
+                <button class="back-btn" onclick="prevStep(3, 2)">←</button>
+            </div>
+        </div>
+        <!-- Step 4: Body Type Questions -->
+        <div class="card hidden" id="step4">
+            <div class="question">
+                <div class="question-title">Body Type Analysis</div>
+                <!-- <div class="question-subtitle">Please answer the following questions</div> -->
+                
+                <div class="body-type-question" id="body-question-1">
+                    <div style="font-weight: 600; margin-bottom: 10px;">When wearing a V-neck T-shirt:</div>
+                    <div class="clothing-image">
+                        <img src="material/Vneck.png" alt="V-neck shirt">
+                    </div>
+                    <div class="options">
+                        <div class="option" onclick="selectBodyTypeOption(this, 1, 'comfortable')">
+                            It feels right and suits me well
+                        </div>
+                        <div class="option" onclick="selectBodyTypeOption(this, 1, 'uncomfortable')">
+                            It feels awkward or doesn't quite work
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="body-type-question hidden" id="body-question-2">
+                    <div style="font-weight: 600; margin-bottom: 10px;">Do sharp jackets and suits work for you?</div>
+                    <div class="clothing-image">
+                        <img src="material/jacket.png" alt="Sharp jacket">
+                    </div>
+                    <div class="options">
+                        <div class="option" onclick="selectBodyTypeOption(this, 2, 'comfortable')">
+                            They look great on me 👌
+                        </div>
+                        <div class="option" onclick="selectBodyTypeOption(this, 2, 'uncomfortable')">
+                            They feel off or awkward on me
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="body-type-question hidden" id="body-question-3">
+                    <div style="font-weight: 600; margin-bottom: 10px;">When wearing high-neck or close-fitting necklines:</div>
+                    <div class="clothing-image">
+                        <img src="material/blouse.png" alt="Blouse">
+                    </div>
+                    <div class="options">
+                        <div class="option" onclick="selectBodyTypeOption(this, 3, 'comfortable')">
+                            They feel natural and flattering
+                        </div>
+                        <div class="option" onclick="selectBodyTypeOption(this, 3, 'uncomfortable')">
+                            They feel restricting or unflattering
+                        </div>
+                    </div>
+                </div>
+
+                <div class="body-type-question hidden" id="body-question-4">
+                    <div style="font-weight: 600; margin-bottom: 10px;">When wearing tight skinny pants:</div>
+                    <div class="clothing-image">
+                        <img src="material/tichetpants.png" alt="Skinny pants">
+                    </div>
+                    <div class="options">
+                        <div class="option" onclick="selectBodyTypeOption(this, 4, 'comfortable')">
+                            They look and feel great on me ✨
+                        </div>
+                        <div class="option" onclick="selectBodyTypeOption(this, 4, 'uncomfortable')">
+                            They don't feel right on my body
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="body-type-question hidden" id="body-question-5">
+                    <div style="font-weight: 600; margin-bottom: 10px;">When wearing a chunky, oversized knit sweater:</div>
+                    <div class="clothing-image">
+                        <img src="material/oversizedknit.png" alt="Oversized knit">
+                    </div>
+                    <div class="options">
+                        <div class="option" onclick="selectBodyTypeOption(this, 5, 'comfortable')">
+                            It looks cool and feels right
+                        </div>
+                        <div class="option" onclick="selectBodyTypeOption(this, 5, 'uncomfortable')">
+                            It overwhelms my frame or looks off
+                        </div>
+                    </div>
+                </div>
+
+                <div class="body-type-question hidden" id="body-question-6">
+                    <div style="font-weight: 600; margin-bottom: 10px;">Clothes with large patterns rather than solid colors:</div>
+                    <div class="clothing-image">
+                        <img src="material/patterned.png" alt="Patterned clothes">
+                    </div>
+                    <div class="options">
+                        <div class="option" onclick="selectBodyTypeOption(this, 6, 'comfortable')">
+                            They complement my look 🔥
+                        </div>
+                        <div class="option" onclick="selectBodyTypeOption(this, 6, 'uncomfortable')">
+                            They feel overwhelming or awkward
+                        </div>
+                    </div>
+                </div>
+
+                <div class="body-type-question hidden" id="body-question-7">
+                    <div style="font-weight: 600; margin-bottom: 10px;">High-waisted designs or tucked-in styles:</div>
+                    <div class="clothing-image">
+                        <img src="material/waistin.png" alt="Tucked-in style">
+                    </div>
+                    <div class="options">
+                        <div class="option" onclick="selectBodyTypeOption(this, 7, 'comfortable')">
+                            They highlight my best features
+                        </div>
+                        <div class="option" onclick="selectBodyTypeOption(this, 7, 'uncomfortable')">
+                            They don't flatter my proportions
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="body-type-question hidden" id="body-question-8">
+                    <div style="font-weight: 600; margin-bottom: 10px;">Which silhouette feels more like "you"?</div>
+                    <div class="clothing-image">
+                        <img src="material/sharpe&curvy.png" alt="Straight vs Curved">
+                    </div>
+                    <div class="options">
+                        <div class="option" onclick="selectBodyTypeOption(this, 8, 'comfortable')">
+                            A: Straight, angular silhouettes
+                        </div>
+                        <div class="option" onclick="selectBodyTypeOption(this, 8, 'uncomfortable')">
+                            B: Rounded, curvy silhouettes
+                        </div>
+                    </div>
+                </div>
+
+                <div class="body-type-question hidden" id="body-question-9">
+                    <div style="font-weight: 600; margin-bottom: 10px;">When wearing form-fitting clothes:</div>
+                    <div class="clothing-image">
+                        <img src="material/tighttops.png" alt="Compact clothes">
+                    </div>
+                    <div class="options">
+                        <div class="option" onclick="selectBodyTypeOption(this, 9, 'uncomfortable')">
+                            They highlight my best features 💯
+                        </div>
+                        <div class="option" onclick="selectBodyTypeOption(this, 9, 'comfortable')">
+                            They feel restrictive or unflattering
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="body-type-question hidden" id="body-question-10">
+                    <div style="font-weight: 600; margin-bottom: 10px;">When wearing form-fitting clothes:</div>
+                    <div class="clothing-image">
+                        <img src="material/tighttops.png" alt="Compact clothes">
+                    </div>
+                    <div class="options">
+                        <div class="option" onclick="selectBodyTypeOption(this, 10, 'uncomfortable')">
+                            They look great on me
+                        </div>
+                        <div class="option" onclick="selectBodyTypeOption(this, 10, 'comfortable')">
+                            They don't suit my body type
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="body-type-question hidden" id="body-question-11">
+                    <div style="font-weight: 600; margin-bottom: 10px;">When wearing form-fitting clothes:</div>
+                    <div class="clothing-image">
+                        <img src="material/tighttops.png" alt="Compact clothes">
+                    </div>
+                    <div class="options">
+                        <div class="option" onclick="selectBodyTypeOption(this, 11, 'comfortable')">
+                            They enhance my figure nicely
+                        </div>
+                        <div class="option" onclick="selectBodyTypeOption(this, 11, 'uncomfortable')">
+                            They feel uncomfortable or look odd
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="body-question-12" class="body-type-question hidden">
+                    <h3>Final question: Which description fits you best?</h3>                    
+                    <div class="options">
+                        <div class="option" onclick="selectBodyTypeFinal('straight')">
+                            <p>Volume in upper body. 💪<br>Muscles develop easily, and hands/feet tend to be smaller.</p>
+                        </div>
+                        
+                        <div class="option" onclick="selectBodyTypeFinal('wave')">
+                            <p>Volume in lower body. 🍑<br>Muscles develop less easily, with thinner upper body (especially for women).</p>
+                        </div>
+                        
+                        <div class="option" onclick="selectBodyTypeFinal('natural')">
+                            <p>Overall angular, bony appearance. 📏<br>Hands and feet often larger in proportion to height.</p>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="btn-container">
+                <button class="back-btn" onclick="prevBodyQuestion()">←</button>
+                <div id="next-body-btn" class="btn" style="display: none;">Next</div>
+            </div>
+        </div>
+        <!-- Results -->
+        <div class="card hidden" id="step5">
+            <div class="result-card">
+                <div class="result-icon">🎉</div>
+                <div class="result-title">Your Results</div>
+                <div class="result-description">Here's your personal style analysis</div>
+                <div class="result-details">
+                    <p><strong>Your Color Season:</strong> <span id="result-color"></span></p>
+                    <p><strong>Your Body Type:</strong> <span id="result-body-type"></span></p>
+                    
+                    <div style="margin-top: 20px;">
+                        <h3 style="margin-bottom: 10px;">Color Analysis</h3>
+                        <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+                            <div id="color-chart-container" style="width: min(300px, 90vw); height: min(300px, 90vw); position: relative;">
+                                <canvas id="colorChart" width="200" height="200"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 20px;">
+                        <h3 style="margin-bottom: 10px;">Body Type Analysis</h3>
+                        <div style="width: 100%; display: flex; justify-content: center;">
+                            <div style="width: 80%;">
+                                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                    <span style="width: 100px; font-size: 0.9rem;">Straight:</span>
+                                    <div style="width: 100%; background-color: #eee; border-radius: 6px; height: 12px;">
+                                        <div id="straight-bar" style="width: 0%; background-color: var(--primary); height: 100%; border-radius: 6px;"></div>
+                                    </div>
+                                </div>
+                                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                    <span style="width: 100px; font-size: 0.9rem;">Wave:</span>
+                                    <div style="width: 100%; background-color: #eee; border-radius: 6px; height: 12px;">
+                                        <div id="wave-bar" style="width: 0%; background-color: var(--accent1); height: 100%; border-radius: 6px;"></div>
+                                    </div>
+                                </div>
+                                <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                                    <span style="width: 100px; font-size: 0.9rem;">Natural:</span>
+                                    <div style="width: 100%; background-color: #eee; border-radius: 6px; height: 12px;">
+                                        <div id="natural-bar" style="width: 0%; background-color: var(--secondary); height: 100%; border-radius: 6px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p style="margin-top: 15px;"><strong>Style Advice:</strong></p>
+                    <p id="result-advice"></p>
+                    <p>We'll keep bringing you fun style services! Please join our Waiting List to stay updated! 🙌</p>
+                </div>
+            </div>
+            <div id="email-popup" class="popup hidden">
+                <div class="popup-content">
+                    <h3>Join Our Waiting List</h3>
+                    <div class="email-input-container">
+                        <input type="email" id="user-email" class="email-input" placeholder="Email address (optional)" />
+                        <div style="font-size: 12px; color: #666; margin-top: 5px; text-align: left;">
+                            *Your email will only be used to share new service updates and won't be used for any other purposes.
+                        </div>
+                    </div>
+                    <button class="btn" onclick="showSatisfactionPopup()">Next</button>
+                </div>
+            </div>
+
+            <div class="satisfaction-popup hidden" id="satisfaction-popup">
+                <div class="popup-content">
+                    <div class="popup-title">How was your style analysis?</div>
+                    <div class="star-rating">
+                        <span class="star" data-rating="1" onclick="selectRating(1)">☆</span>
+                        <span class="star" data-rating="2" onclick="selectRating(2)">☆</span>
+                        <span class="star" data-rating="3" onclick="selectRating(3)">☆</span>
+                    </div>
+                    <div class="rating-label" id="rating-label">Please select 3 stars</div>
+                    <div class="btn" onclick="submitRating()">Next</div>
+                </div>
+            </div>
+            
+            <!-- Dissatisfaction Reason Popup -->
+            <div class="feedback-popup hidden" id="feedback-popup">
+                <div class="popup-content">
+                    <div class="popup-title">What didn't work for you?</div>
+                    <div class="feedback-options">
+                        <div class="option" onclick="selectFeedbackOption(this, 'color')">
+                            Not sure if my color season is accurate 🤔
+                        </div>
+                        <div class="option" onclick="selectFeedbackOption(this, 'body')">
+                            The body type description didn't match me 🧐
+                        </div>
+                        <div class="option" onclick="selectFeedbackOption(this, 'both')">
+                            I want more specific clothing recommendations 👚
+                        </div>
+                        <div class="option" onclick="selectFeedbackOption(this, 'other')">
+                            Other
+                        </div>
+                    </div>
+                    <div id="other-feedback-container" class="hidden">
+                        <textarea id="other-feedback" placeholder="Please share your thoughts" rows="3"></textarea>
+                    </div>
+                    <div class="btn" id="submit-feedback-btn">Submit</div>
+                </div>
+            </div>
+            
+            <!-- Final Thank You Popup -->
+            <div class="thanks-popup hidden" id="thanks-popup">
+                <div class="popup-content">
+                    <div class="popup-icon">🙏</div>
+                    <div class="popup-title">Thank You!</div>
+                    <div class="popup-message">
+                        <br>Our new service will automatically suggest clothes that suit you! 📩
+                        <br>Stay tuned! 👋</div>
+                    <div class="btn" onclick="closeAllPopups()">Close</div>
+                </div>
+            </div>
+            
+            <div class="result-buttons">                
+                <div class="btn feedback-btn" onclick="showFeedbackForm()">Join Waiting List</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Overlay Background -->
+    <div class="overlay" id="overlay"></div>
+    
+    <!-- JavaScript Files -->
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
